@@ -1,10 +1,9 @@
-<! DOCTYPE html>
+<!DOCTYPE html>
 <html>
-    <head>
+<head>
         <meta charset="UTF-8">
         <title>Yebin Na's first website</title>
         <link rel="stylesheet" href="style.css">
-    </head>
 
 <style>
 body {
@@ -12,6 +11,12 @@ body {
     height: 100vh;
     overflow: hidden;
     transition: background 1s;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .sun, .moon {
@@ -31,24 +36,41 @@ body {
     height: 80px;
     background: white;
 }
+.content {
+            position: relative;
+            z-index: 10;
+            margin-top: 150px; /* Sun below the text */
+        }
 
-h1 {
-    position: absolute;
-    top: 10%;
-    width: 100%;
-    text-align: center;
-    color: white;
-}
+        .buttons {
+            margin-top: 30px;
+        }
+
+        .buttons button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
 </style>
-
 </head>
-
 <body>
 
-<h1>Day & Night</h1>
+
 
 <div class="sun" id="sun"></div>
 <div class="moon" id="moon"></div>
+<div class="content">
+    <h1>Welcome to Yebin Na's first website!</h1>
+    <p>This is a simple webpage created as a practice for HTML and CSS.</p>
+    <p>Feel free to explore!</p>
+    <div class ="buttons">
+    <button onclick="location.href='overview.html'">Overview</button>
+    <button onclick="location.href='timetable.html'">Timetable for my life</button>
+    <button onclick="location.href='why.html'"> Why pick Yebin for trainee</button>
+    </div>
+</div>
 
 <script>
 function updateSky() {
@@ -57,7 +79,11 @@ function updateSky() {
 
     const sun = document.getElementById("sun");
     const moon = document.getElementById("moon");
-
+    const content = document.querySelector(".content");
+   
+    const contentTop = content.offsetTop;
+    const contentHeight = content.offsetHeight;
+    const maxHeight = contentTop + contentHeight + 20;
     // daytime: 6am-6pm, nighttime: 6pm-6am
     if (hour >= 6 && hour < 18) {
         document.body.style.background = "#87CEEB";
@@ -67,9 +93,10 @@ function updateSky() {
         // change 0-1 for 6-18 hours
         let progress = (hour - 6) / 12;
 
-        let left = progress * window.innerWidth;
-        let top = 60 - 40 * Math.sin(progress * Math.PI);
-
+        let left = progress * (window.innerWidth - 100);
+        let rawTop = maxHeight - 40 * Math.sin(progress * Math.PI);
+        let top = Math.min(rawTop, maxHeight);
+        
         sun.style.left = left + "px";
         sun.style.top = top + "%";
     } 
@@ -82,11 +109,12 @@ function updateSky() {
         let nightHour = hour >= 18 ? hour - 18 : hour + 6;
         let progress = nightHour / 12;
 
-        let left = progress * window.innerWidth;
-        let top = 60 - 40 * Math.sin(progress * Math.PI);
+        let left = progress * (window.innerWidth - 80);
+        let rawTop = maxHeight - 40 * Math.sin(progress * Math.PI);
+        let top = Math.min(rawTop, contentBottom);
 
         moon.style.left = left + "px";
-        moon.style.top = top + "%";
+        moon.style.top = top + "px";
     }
 }
 
@@ -96,13 +124,8 @@ updateSky();
 // update the sky every minute
 setInterval(updateSky, 60000);
 </script>
-<body>
-    <h1>Welcome to Yebin Na's first website!</h1>
-    <p>This is a simple webpage created as a practice for HTML and CSS.</p>
-    <p>Feel free to explore!</p>
+   
 
-    <button onclick="location.href='overview.html'">Overview</button>
-    <button onclick="location.href='features.html'">Features explained</button>
-    <button onclick="location.href='why.html'"> Why pick Yebin for trainee</button>
+    
 </body>
 </html>

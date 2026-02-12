@@ -5,6 +5,97 @@
         <title>Yebin Na's first website</title>
         <link rel="stylesheet" href="style.css">
     </head>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    transition: background 1s;
+}
+
+.sun, .moon {
+    position: absolute;
+    border-radius: 50%;
+    transition: all 1s ease;
+}
+
+.sun {
+    width: 100px;
+    height: 100px;
+    background: yellow;
+}
+
+.moon {
+    width: 80px;
+    height: 80px;
+    background: white;
+}
+
+h1 {
+    position: absolute;
+    top: 10%;
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Day & Night</h1>
+
+<div class="sun" id="sun"></div>
+<div class="moon" id="moon"></div>
+
+<script>
+function updateSky() {
+    const now = new Date();
+    const hour = now.getHours() + now.getMinutes()/60;
+
+    const sun = document.getElementById("sun");
+    const moon = document.getElementById("moon");
+
+    // daytime: 6am-6pm, nighttime: 6pm-6am
+    if (hour >= 6 && hour < 18) {
+        document.body.style.background = "#87CEEB";
+        sun.style.display = "block";
+        moon.style.display = "none";
+
+        // change 0-1 for 6-18 hours
+        let progress = (hour - 6) / 12;
+
+        let left = progress * window.innerWidth;
+        let top = 60 - 40 * Math.sin(progress * Math.PI);
+
+        sun.style.left = left + "px";
+        sun.style.top = top + "%";
+    } 
+    else {
+        document.body.style.background = "#0b1d3a";
+        sun.style.display = "none";
+        moon.style.display = "block";
+
+        // change 0-1 for 18-6 hours
+        let nightHour = hour >= 18 ? hour - 18 : hour + 6;
+        let progress = nightHour / 12;
+
+        let left = progress * window.innerWidth;
+        let top = 60 - 40 * Math.sin(progress * Math.PI);
+
+        moon.style.left = left + "px";
+        moon.style.top = top + "%";
+    }
+}
+
+// update the sky immediately on page load
+updateSky();
+
+// update the sky every minute
+setInterval(updateSky, 60000);
+</script>
 <body>
     <h1>Welcome to Yebin Na's first website!</h1>
     <p>This is a simple webpage created as a practice for HTML and CSS.</p>
